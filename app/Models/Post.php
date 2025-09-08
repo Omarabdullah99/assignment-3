@@ -5,21 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
 
-class Category extends Model
+class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['title', 'body', 'is_published', 'category_id'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function posts(): HasMany
+    public function category(): BelongsTo
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsTo(Category::class);
     }
 }
