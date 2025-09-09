@@ -48,6 +48,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Post::class);
         $data = $request->validate([
             'title' => 'required|string|max:30',
             'body' => 'required|string|max:200',
@@ -73,6 +74,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorize('update', $post);
         return view('posts.edit', [
             'post' => $post->load('user', 'category'),
             'categories' => Category::latest()->get(),
@@ -84,7 +86,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-
+        $this->authorize('update', $post);
         $data = $request->validate([
             'title' => 'required|string|max:30',
             'body' => 'required|string|max:200',
@@ -101,6 +103,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('delete', $post);
         $post->delete();
 
         return redirect()->route('post.index')->with('status', 'Deleted');
@@ -108,7 +111,7 @@ class PostController extends Controller
 
     public function publish(Post $post)
     {
-
+        $this->authorize('publish', $post);
         $post->update(['is_published' => true]);
 
         return redirect()->route('post.index')->with('status', 'Published');

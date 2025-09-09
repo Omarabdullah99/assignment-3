@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Gate;
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        Category::class => CategoryPolicy::class, // <- Full namespace দিতে হবে
+        Category::class => CategoryPolicy::class,
         Post::class => PostPolicy::class,
-        User::class=>UserPolicy::class
+        User::class => UserPolicy::class
 
     ];
 
@@ -33,6 +33,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerPolicies(); // ✅ এখন আর error আসবে না
+        $this->registerPolicies();
+
+        Gate::define('access-admin', function (User $user) {
+            return in_array($user->role, [ 'admin']);
+        });
     }
 }
