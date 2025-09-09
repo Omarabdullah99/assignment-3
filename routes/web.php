@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,9 +24,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/create/category', [CategoryController::class,'create'])->middleware('auth')->name('category.create');
 Route::get('/categoires',[CategoryController::class,'index'])->middleware('auth')->name('category.index');
 Route::post('/create/category',[CategoryController::class, 'store'])->middleware('auth')->name('category.store');
-Route::get('/category/{category}/edit', [CategoryController::class, 'edit'])->name('category.edit');
-Route::patch('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
-Route::delete('/category/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+Route::get('/category/{category}/edit', [CategoryController::class, 'edit'])->middleware('auth')->name('category.edit');
+Route::patch('/category/{category}', [CategoryController::class, 'update'])->middleware('auth')->name('category.update');
+Route::delete('/category/{category}', [CategoryController::class, 'destroy'])->middleware('auth')->name('category.destroy');
 //category related route end
 
 
@@ -34,8 +35,15 @@ Route::get('/create/post', [PostController::class,'create'])->middleware('auth')
 Route::post('/create/post',[PostController::class, 'store'])->middleware('auth')->name('post.store');
 Route::get('/posts',[PostController::class,'index'])->middleware('auth')->name('post.index');
 Route::get('/posts/{post}',[PostController::class,'show'])->middleware('auth')->name('post.show');
-Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
-Route::patch('/posts/{post}', [PostController::class, 'update'])->name('post.update');
-Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('post.destroy');
-Route::post('/posts/{post}/publish', [PostController::class, 'publish'])->name('post.publish');
+Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->middleware('auth')->name('post.edit');
+Route::patch('/posts/{post}', [PostController::class, 'update'])->middleware('auth')->name('post.update');
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])->middleware('auth')->name('post.destroy');
+Route::post('/posts/{post}/publish', [PostController::class, 'publish'])->middleware('auth')->name('post.publish');
+//posts related route end
+
+//users related route start
+Route::get('/users', [UserController::class,'index'])->middleware('auth')->name('users.index');
+Route::get('/users/{user}/edit',[UserController::class,'edit'])->middleware('auth')->name('users.edit');
+Route::patch('/users/{user}',[UserController::class,'update'])->middleware('auth')->name('users.update');
+Route::delete('/users/{user}', [UserController::class,'destroy'])->middleware('auth')->name('users.destroy');
 require __DIR__.'/auth.php';
